@@ -14,9 +14,16 @@ commit_message="$*"
 
 git add .
 
-# Calculate days since start (in PST)
-days_since_start=$(TZ='America/Los_Angeles' \
-    expr $(date +%s) - $(date -d "$START_DATE" +%s) )
+# Calculate days since start (in PST), adding 1 to count the start day as day 1
+if date -d "2000-01-01" >/dev/null 2>&1; then
+    # GNU date
+    days_since_start=$(TZ='America/Los_Angeles' \
+        expr $(date +%s) - $(date -d "$START_DATE" +%s) )
+else
+    # BSD date (macOS)
+    days_since_start=$(TZ='America/Los_Angeles' \
+        expr $(date +%s) - $(date -j -f "%Y-%m-%d" "$START_DATE" +%s) )
+fi
 days_since_start=$(( days_since_start / 86400 + 1 ))
 
 # Function to get correct ordinal suffix
