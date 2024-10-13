@@ -24,7 +24,7 @@ git add .
 # Calculate days since start (in PST)
 days_since_start=$(TZ='America/Los_Angeles' \
     expr $(date +%s) - $(date -d "$START_DATE" +%s) )
-days_since_start=$(( days_since_start / 86400 ))
+days_since_start=$(( days_since_start / 86400 + 1 ))
 
 # Function to get correct ordinal suffix
 ordinal_suffix() {
